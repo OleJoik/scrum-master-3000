@@ -1,0 +1,8 @@
+services:
+  scrum-master:
+    build: .
+    networks:
+      - scrum-master
+
+networks:
+  scrum-master:

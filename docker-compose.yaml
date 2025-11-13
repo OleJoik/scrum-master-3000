@@ -6,3 +6,4 @@ services:
 
 networks:
   scrum-master:
+    name: scrum-master

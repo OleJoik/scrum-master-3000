@@ -16,9 +16,17 @@ class AppConfig(BaseSettings):
     port: int = 8080
     host: str = "0.0.0.0"
 
+    session_secret: SecretStr = Field(default=...)
+
+    app_base_uri: str = Field(default=...)
+
     oidc_config_path: str = Field(default=...)
     oidc_client_id: str = Field(default=...)
     oidc_client_secret: SecretStr = Field(default=...)
-    oidc_redirect_uri: str = Field(default=...)
+    oidc_signature_algorithm: str = Field(default=...)
+
+    @property
+    def oidc_redirect_uri(self) -> str:
+        return f"{self.app_base_uri}/auth/callback"
 
     model_config = SettingsConfigDict(env_file=".env")

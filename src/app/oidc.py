@@ -8,6 +8,7 @@ class OidcConfig(BaseModel):
     authorization_endpoint: str
     token_endpoint: str
     jwks_uri: str
+    end_session_endpoint: str
 
 
 def oidc_config(config: AppConfig) -> OidcConfig:

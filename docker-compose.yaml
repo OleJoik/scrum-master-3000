@@ -1,8 +1,12 @@
 services:
   scrum-master:
     build: .
+    ports:
+      - "8755:8755"
     networks:
       - scrum-master
+    env_file:
+      - .env
 
 networks:
   scrum-master:

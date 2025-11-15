@@ -13,7 +13,7 @@ class LogLevel(StrEnum):
 
 class AppConfig(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
-    port: int = 8080
+    port: int = 8755
     host: str = "0.0.0.0"
 
     session_secret: SecretStr = Field(default=...)

@@ -13,6 +13,12 @@
 uv sync
 ```
 
+Create a .env file and fill variables for local development
+
+```sh
+cp .env.template .env
+```
+
 ### Run the app
 
 ```sh

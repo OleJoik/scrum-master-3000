@@ -4,7 +4,7 @@ from app.bootstrap import setup_app
 from app.config import AppConfig
 
 config = AppConfig()
-app = setup_app()
+app = setup_app(config)
 
 
 def main():

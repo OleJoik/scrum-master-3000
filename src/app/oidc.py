@@ -1,0 +1,14 @@
+import httpx
+from pydantic import BaseModel
+
+from app.config import AppConfig
+
+
+class OidcConfig(BaseModel):
+    authorization_endpoint: str
+    token_endpoint: str
+    jwks_uri: str
+
+
+def oidc_config(config: AppConfig) -> OidcConfig:
+    return OidcConfig.model_validate(httpx.get(config.oidc_config_path).json())

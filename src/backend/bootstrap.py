@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-
-from app.config import AppConfig
-from app.dependencies import set_state
-from app.routes.root import router
 from starlette.middleware.sessions import SessionMiddleware
+
+from backend.config import AppConfig
+from backend.dependencies import set_state
+from backend.routes.root import router
 
 
 def setup_app(config: AppConfig):

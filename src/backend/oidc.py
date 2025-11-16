@@ -1,7 +1,7 @@
 import httpx
 from pydantic import BaseModel
 
-from app.config import AppConfig
+from backend.config import AppConfig
 
 
 class OidcConfig(BaseModel):

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 import secrets
 from urllib.parse import urlencode
 
@@ -9,9 +9,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel
 
-from app.config import AppConfig
-from app.dependencies import get_config, get_oidc_config
-from app.oidc import OidcConfig
+from backend.config import AppConfig
+from backend.dependencies import get_config, get_oidc_config
+from backend.oidc import OidcConfig
 
 auth_router = APIRouter()
 
@@ -43,13 +43,21 @@ async def verify_id_token(
     return UserIdentity.model_validate({**payload, "token": id_token})
 
 
-async def authenticate():
-    raise HTTPException(303, headers={"Location": "/auth/login"})
+async def authenticate(request: Request):
+    user = request.session.get("user")
+    if user:
+        identity = UserIdentity.model_validate(user)
+        if identity.exp > datetime.now(tz=UTC):
+            return
+
+    next_url = request.url.path
+    raise HTTPException(303, headers={"Location": f"/auth/login?next={next_url}"})
 
 
 @auth_router.get("/auth/login")
 async def login(
     request: Request,
+    next: str | None = None,
     oidc_config: OidcConfig = Depends(get_oidc_config),
     app_config: AppConfig = Depends(get_config),
 ):
@@ -59,6 +67,7 @@ async def login(
     request.session["oidc"] = {
         "state": state,
         "nonce": nonce,
+        "next": next,
     }
 
     params = {
@@ -109,12 +118,15 @@ async def callback(
         id_token, stored["nonce"], oidc_config, app_config
     )
 
-    request.session["user"] = verified_id_token.model_dump(mode="json")
+    next_url = stored.get("next")
     request.session.pop("oidc", None)
 
-    return HTMLResponse(
-        h.div[str(verified_id_token), h.a(href="/auth/logout")["/logout"]]
-    )
+    request.session["user"] = verified_id_token.model_dump(mode="json")
+
+    if next_url:
+        return RedirectResponse(next_url)
+
+    return RedirectResponse(app_config.app_base_uri)
 
 
 @auth_router.get("/auth/logout")

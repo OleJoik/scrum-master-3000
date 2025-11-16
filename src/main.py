@@ -1,7 +1,7 @@
 import uvicorn
 
-from app.bootstrap import setup_app
-from app.config import AppConfig
+from backend.bootstrap import setup_app
+from backend.config import AppConfig
 
 config = AppConfig()
 app = setup_app(config)

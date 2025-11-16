@@ -1,6 +1,10 @@
 .venv
 __pycache__
 
+node_modules
+.react
+.tailwind
+
 .direnv
 .envrc
 .env

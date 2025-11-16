@@ -16,6 +16,7 @@
       let
         pkgs = import nixpkgs {inherit system; };
         python = pkgs.python313;
+        node = pkgs.nodejs_24;
       in {
         default = pkgs.mkShell {
           packages = with pkgs; [
@@ -23,6 +24,8 @@
             stdenv.cc.cc.lib
             uv
             python
+            esbuild
+            node
           ];
 
           env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
@@ -33,7 +36,7 @@
           shellHook = ''
             source .venv/bin/activate
             uv sync
-            echo "🐍 Python: ${python.version} | uv: $(uv --version 2>/dev/null || true)"
+            echo "Python: ${python.version} | Node: ${node.version} | uv: $(uv --version 2>/dev/null || true) | esbuild: ${pkgs.esbuild.version}"
           '';
         };
       }

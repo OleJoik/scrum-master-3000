@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 
-from app.config import AppConfig
-from app.oidc import OidcConfig, oidc_config
+from backend.config import AppConfig
+from backend.oidc import OidcConfig, oidc_config
 
 
 def set_state(app: FastAPI, config: AppConfig):

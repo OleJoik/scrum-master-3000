@@ -1,5 +1,5 @@
 [project]
-name = "app"
+name = "backend"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -19,7 +19,8 @@ dependencies = [
 ]
 
 [project.scripts]
-dev = "dev:main"
+dev = "scripts.dev:main"
+build = "scripts.build:main"
 main = "main:main"
 
 [build-system]
